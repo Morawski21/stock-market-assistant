@@ -1,4 +1,12 @@
-.PHONY: setup lint test clean run
+.PHONY: help setup lint test run clean
+
+help:
+	@echo "Available commands:"
+	@echo "  make setup   install dependencies and pre-commit hooks"
+	@echo "  make lint    run ruff check and format"
+	@echo "  make test    run pytest"
+	@echo "  make run     start the CLI chat"
+	@echo "  make clean   remove cache directories"
 
 setup:
 	uv sync
@@ -13,7 +21,3 @@ test:
 
 run:
 	PYTHONPATH=src uv run python main.py
-
-clean:
-	find . -type d -name __pycache__ | xargs rm -rf
-	rm -rf .pytest_cache .ruff_cache
