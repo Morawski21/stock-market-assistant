@@ -1,4 +1,4 @@
-.PHONY: setup lint test clean
+.PHONY: setup lint test clean run
 
 setup:
 	uv sync
@@ -10,6 +10,9 @@ lint:
 
 test:
 	uv run pytest
+
+run:
+	PYTHONPATH=src uv run python main.py
 
 clean:
 	find . -type d -name __pycache__ | xargs rm -rf
