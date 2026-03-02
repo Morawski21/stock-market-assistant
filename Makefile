@@ -20,4 +20,7 @@ test:
 	uv run pytest
 
 run:
-	PYTHONPATH=src uv run python main.py
+	uv run python main.py
+
+clean:
+	uv run python scripts/clean.py
