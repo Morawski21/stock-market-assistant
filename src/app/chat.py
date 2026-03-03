@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 from claude_agent_sdk import (
     AssistantMessage,
@@ -8,9 +9,12 @@ from claude_agent_sdk import (
     TextBlock,
     ToolUseBlock,
 )
+from dotenv import load_dotenv
 
 from app.prompts import SYSTEM_PROMPT
 from utils.logger import get_logger
+
+load_dotenv()
 
 logger = get_logger(__name__)
 
@@ -43,10 +47,18 @@ def _format_input(tool_input: dict) -> str:
 
 class StockMarketChat:
     def __init__(self) -> None:
+        fmp_key = os.environ["FMP_API_KEY"]
         self._options = ClaudeAgentOptions(
             system_prompt=SYSTEM_PROMPT,
             permission_mode="bypassPermissions",
-            allowed_tools=["WebSearch", "WebFetch"],
+            allowed_tools=["WebSearch", "WebFetch", "mcp__fmp__*"],
+            mcp_servers={
+                "fmp": {
+                    "command": "uv",
+                    "args": ["run", "python", "-m", "mcp_servers.fmp"],
+                    "env": {"FMP_API_KEY": fmp_key},
+                }
+            },
         )
         self._client = ClaudeSDKClient(options=self._options)
 
